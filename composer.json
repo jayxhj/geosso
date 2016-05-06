@@ -1,0 +1,26 @@
+{
+    "name": "geo/geosso",
+    "description": "The SSO Package For GEO",
+    "homepage": "https://github.com/jayxhj/geosso",
+    "type": "library",
+    "require": {
+        "laravel/framework": "5.1"
+    },
+    "autoload": {
+        "files": [
+            "src/Support/SsoHelper.php"
+        ],
+        "psr-4": {
+            "SSO\\": "src/"
+        }   
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "xuhaojie",
+            "email": "xuhaojie@geotmt.com",
+            "homepage": "http://blog.jayxhj.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
