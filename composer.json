@@ -1,5 +1,5 @@
 {
-    "name": "geo/geosso",
+    "name": "geosso/geosso",
     "description": "The SSO Package For GEO",
     "homepage": "https://github.com/jayxhj/geosso",
     "type": "library",
