@@ -4,6 +4,7 @@ namespace Sso\Http\Controllers;
 
 use Sso\Http\Requests\SsoRequest;
 use Sso\Support\SsoResponse;
+use Sso\Support\SsoClientConfig;
 
 class SsoController extends Controller
 {
@@ -191,6 +192,7 @@ class SsoController extends Controller
     private function _getService()
     {
         if (is_null(self::$SERVICE)) {
+            app(SsoClientConfig::class)->setConfig($this->_configName);
             self::$SERVICE = app()->make(config($this->_configName.'.sso_service'));
         }
 
