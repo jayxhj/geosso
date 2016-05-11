@@ -15,9 +15,9 @@ class SsoClientConfig
      * */
     public function setConfig($configName)
     {
-        $configPath = config('ssoclientconfig')[$configName];
-        if (! is_null($configPath)) {
-            $config = $this->getClientConfig($configPath);
+        $ssoConfig = config('ssoclientconfig.'.$configName);
+        if (! is_null(array_get($ssoConfig, 'path'))) {
+            $config = $this->getClientConfig(array_get($ssoConfig, 'path'));
             \Config::set($configName, $config);
         }
     }
