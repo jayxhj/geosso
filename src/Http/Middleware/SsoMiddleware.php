@@ -83,11 +83,13 @@ class SsoMiddleware
      * */
     private function _filterSign($request)
     {
-        $time    = $request->input('time');
-        $params  = $request->input('params');
-        $sign    = $request->input('sign');
-        $key     = config(array_get(\Route::getCurrentRoute()->getAction(), 'config_name'))['sso_key'];
-        $md5Sign = md5($key.$time.$params);
+        $time       = $request->input('time');
+        $params     = $request->input('params');
+        $sign       = $request->input('sign');
+        $configKey  = array_get(\Route::getCurrentRoute()->getAction(), 'config_key');
+        $configName = app(SsoClientConfig::class)->getConfigName($configKey);
+        $key        = config($configName)['sso_key'];
+        $md5Sign    = md5($key.$time.$params);
 
         $timeDiff = abs(time() - $time);
         if ($md5Sign == $sign && $timeDiff < SsoResponse::REQUEST_DURATION) {
@@ -103,9 +105,9 @@ class SsoMiddleware
      * */
     private function _setConfig()
     {
-        $configName = array_get(\Route::getCurrentRoute()->getAction(), 'config_name');
-        $configObj  = app(SsoClientConfig::class);
-        $configObj->setConfig($configName);
+        $configKey = array_get(\Route::getCurrentRoute()->getAction(), 'config_key');
+
+        return app(SsoClientConfig::class->setConfig($configKey));
     }
 
 

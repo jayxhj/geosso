@@ -9,11 +9,12 @@ use Sso\Support\SsoClientConfig;
 class SsoController extends Controller
 {
 
-    private static $SERVICE = null;
-    private $_configName = '';
+    private static $SERVICE    = null;
+    private        $_configKey = '';
 
-    public function __construct(){
-        $this->_configName = array_get(\Route::getCurrentRoute()->getAction(),'config_name');
+    public function __construct()
+    {
+        $this->_configKey = array_get(\Route::getCurrentRoute()->getAction(), 'config_key');
     }
 
     /**
@@ -192,8 +193,10 @@ class SsoController extends Controller
     private function _getService()
     {
         if (is_null(self::$SERVICE)) {
-            app(SsoClientConfig::class)->setConfig($this->_configName);
-            self::$SERVICE = app()->make(config($this->_configName.'.sso_service'));
+            $configObj = app(SsoClientConfig::class);
+            $configObj->setConfig($this->_configKey);
+            $configName    = $configObj->getConfigName($this->_configKey);
+            self::$SERVICE = app()->make(config($configName.'.sso_service'));
         }
 
         return self::$SERVICE;

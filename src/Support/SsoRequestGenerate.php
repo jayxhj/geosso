@@ -27,23 +27,25 @@ class SsoRequestGenerate
      * 生成请求 SSO 的 url
      * @param string $action
      * @param array  $params
-     * @param string $configName
+     * @param string $configKey
      * @return string
      *
      * */
-    public function getRequestUrl($action, array $params, $configName)
+    public function getRequestUrl($action, array $params, $configKey)
     {
         // 设置配置
-        app(SsoClientConfig::class)->setConfig($configName);
-        $isAllowed = $this->_isActionAllowed($action);
-        $action    = $isAllowed ? $action : '404';
+        app(SsoClientConfig::class)->setConfig($configKey);
+        $isAllowed  = $this->_isActionAllowed($action);
+        $action     = $isAllowed ? $action : '404';
+        $configName = app(SsoClientConfig::class)->getConfigName($configKey);
+
         $key       = config($configName)['sso_key'];
         $time      = time();
         $urlParams = json_encode($params);
         $sign      = md5($key.$time.$urlParams);
 
         return sprintf('%s/%s?time=%s&params=%s&sign=%s',
-            $this->getSsoUrl($configName),
+            $this->getSsoUrl($configKey),
             $action,
             $time,
             $urlParams,
@@ -64,13 +66,14 @@ class SsoRequestGenerate
 
     /**
      * 获取 SSO url
-     * @param string $configName
+     * @param string $configKey
      * @return string
      *
      * */
-    public function getSsoUrl($configName)
+    public function getSsoUrl($configKey)
     {
-        app(SsoClientConfig::class)->setConfig($configName);
+        app(SsoClientConfig::class)->setConfig($configKey);
+        $configName = app(SsoClientConfig::class)->getConfigName($configKey);
 
         return config($configName)['sso_url'];
     }
