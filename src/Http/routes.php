@@ -2,13 +2,13 @@
 
 $groups = config('ssoclientconfig');
 
-foreach ($groups as $client) {
-    Route::group(['domain' => array_get($client, 'domain')], function () use ($client) {
+foreach ($groups as $configKey => $client) {
+    Route::group(['domain' => array_get($client, 'domain')], function () use ($configKey) {
         Route::get('/sso', [
-            'config_name' => array_get($client, 'config_name'),
-            'uses'        => 'SsoController@index',
-            'middleware'  => Sso\Http\Middleware\SsoMiddleware::class,
-            'namespace '  => 'Sso\Http\Controllers'
+            'config_key' => $configKey,
+            'uses'       => 'SsoController@index',
+            'middleware' => Sso\Http\Middleware\SsoMiddleware::class,
+            'namespace ' => 'Sso\Http\Controllers'
         ]);
     });
 }
