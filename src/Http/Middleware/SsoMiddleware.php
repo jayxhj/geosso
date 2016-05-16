@@ -107,7 +107,7 @@ class SsoMiddleware
     {
         $configKey = array_get(\Route::getCurrentRoute()->getAction(), 'config_key');
 
-        return app(SsoClientConfig::class->setConfig($configKey));
+        return app(SsoClientConfig::class)->setConfig($configKey);
     }
 
 
